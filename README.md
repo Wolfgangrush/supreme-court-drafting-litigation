@@ -13,7 +13,7 @@
 1. [What this plugin does](#what-this-plugin-does)
 2. [Case-type skills (full inventory with statutory authority)](#case-type-skills-full-inventory)
 3. [The 6-agent drafting pipeline (what each agent does)](#the-6-agent-drafting-pipeline)
-4. [Installation](#installation) — Claude Code CLI **and** Claude Desktop application
+4. [Installation](#installation) — Claude Desktop application
 5. [Your first SLP — step-by-step walkthrough](#your-first-slp--step-by-step-walkthrough)
 6. [The Supreme Court Rules 2013 — what this plugin encodes](#the-supreme-court-rules-2013--what-this-plugin-encodes)
 7. [Why MIT License (and not Apache 2.0, GPL, or anything else)](#why-mit-license)
@@ -328,7 +328,7 @@ Advocates-on-Record and senior advocates with regular Supreme Court practice are
 
 Pull requests welcome with a one-paragraph explanation and a reference to the SC Rules / Practice Direction / Constitution Bench judgment that justifies the change.
 
-This plugin is open source under MIT. No proprietary gating. No login. No telemetry. No tracking of who uses the plugin or what cases they file.
+This plugin is open source under MIT.
 
 ---
 
