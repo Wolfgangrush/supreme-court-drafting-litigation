@@ -132,29 +132,7 @@ The plugin is built on the **Anthropic Agent SDK** convention — six markdown a
 
 ## Installation
 
-This is a Claude-compatible plugin in the Anthropic plugin format. It runs inside any Claude-compatible runtime — the **Claude Code CLI** or the **Claude Desktop application** — and can also run inside a custom Anthropic-API-based runtime that respects the `SKILL.md` frontmatter convention.
-
-### Option A — Claude Code (terminal CLI)
-
-Claude Code is Anthropic's official command-line interface, available at <https://claude.com/claude-code>. Install Claude Code first, then:
-
-```bash
-# 1. Navigate to the Claude Code plugins folder (it will be auto-created on first use)
-mkdir -p ~/.claude/plugins
-cd ~/.claude/plugins
-
-# 2. Clone the plugin
-git clone https://github.com/Wolfgangrush/supreme-court-drafting-litigation.git supreme-court-drafting
-
-# 3. Verify Claude Code picks it up
-claude plugin list
-```
-
-You should see `supreme-court-drafting` in the list. Launch Claude Code from inside your case folder and start invoking skills.
-
-### Option B — Claude Desktop application (macOS / Windows / Linux)
-
-Claude Desktop is Anthropic's GUI application (available at <https://claude.ai/download>). The plugin folder location depends on your OS:
+This is a Claude-compatible plugin in the Anthropic plugin format, designed to run inside the **Claude Desktop application** (available at <https://claude.ai/download>). The plugin folder location depends on your OS:
 
 | OS | Plugin folder path |
 |---|---|
@@ -166,17 +144,19 @@ Clone the plugin into that folder:
 
 ```bash
 # macOS / Linux
-cd ~/Library/Application\ Support/Claude/plugins         # adjust path per OS table
+mkdir -p ~/Library/Application\ Support/Claude/plugins   # adjust per OS table
+cd ~/Library/Application\ Support/Claude/plugins
 git clone https://github.com/Wolfgangrush/supreme-court-drafting-litigation.git supreme-court-drafting
 
 # Windows (PowerShell)
+mkdir -Force $env:APPDATA\Claude\plugins
 cd $env:APPDATA\Claude\plugins
 git clone https://github.com/Wolfgangrush/supreme-court-drafting-litigation.git supreme-court-drafting
 ```
 
 Restart the Claude Desktop application.
 
-### Option C — Anthropic Plugin Marketplace (when available)
+### Anthropic Plugin Marketplace (when available)
 
 When the plugin lands on the Anthropic Plugin Marketplace, you will be able to install it from inside the application's plugin browser without `git`. Until then, the manual clone steps above are canonical.
 
@@ -333,13 +313,12 @@ Just as importantly: **the Supreme Court has publicly cautioned against AI-gener
 
 ## Roadmap
 
-- [x] **v0.1.0-alpha** — SLP (Civil + Criminal), Writ Art 32, Transfer Petition, Review Petition, Curative Petition + 6-agent pipeline + shared SC pleading base
-- [ ] **v0.1.0** — full quality-gate pass + Registry-format verification + sample case-folder walkthrough + tagged release
-- [ ] **v0.2.0** — Caveat (CPC Section 148A SC variant) + Reference under Article 143 (Presidential Reference)
-- [ ] **v0.3.0** — Tagged appeals (Tax Appeals from ITAT under Section 260A IT Act / Customs Appeals / Competition Commission Appeals under Section 53T Competition Act / Electricity Appellate Tribunal appeals)
-- [ ] **v0.4.0** — Bail under Article 136 (separate standalone where the case requires a dedicated bail petition rather than the criminal-SLP body)
-- [ ] **v0.5.0** — Election Petitions (Article 71 + Representation of the People Act 1951)
+- [x] **v0.1.0-alpha (current)** — SLP (Civil + Criminal), Writ Art 32, Transfer Petition, Review Petition, Curative Petition + 6-agent pipeline + shared SC pleading base
+- [ ] **v0.1.x** — bug fixes, Registry-format polish, citation-discipline refinements, language-register iteration
+- [ ] **v0.x onward** — additional SC case-type skills (Caveats, Tagged Appeals from tribunals, Article 143 References, Election Petitions, standalone Article 136 Bail, etc.) as community-requested
 - [ ] **v1.0.0** — Stable release after community-validated use by sitting AORs
+
+The roadmap above is intentionally open-ended. Additional case-type skills will arrive as AORs identify the procedural-drafting patterns they would like the plugin to encode.
 
 ---
 
