@@ -183,3 +183,45 @@ If anyone asks "how was this drafted":
 4. AOR signature and verification remain the AOR's responsibility — the audit trail goes up to the .docx produced; everything thereafter is the human AOR's review and signature
 
 This is the audit-defense kit for any AI-use challenge before the Supreme Court.
+
+
+---
+
+## v0.2.2 OUTPUT-PAIRING DISCIPLINE (load-bearing — every agent must follow)
+
+**Every `.md` output artifact MUST be paired with a `.docx`.** Advocates do not natively read Markdown — they read Word. Every pipeline output (case-facts.md from Reader, format-shell.md from Format, draft-v1.md from Drafter, verification-report.md from Verifier, draft-v2.md from Refiner, opposing-notes.md from Overseer) must have a corresponding `.docx` rendered with the same locked Word styles.
+
+**This plugin produces pleadings** — the shipped reference.docx is the pleading variant (TNR 14pt 1.5 spacing, Heading 2 bold + UNDERLINED + centered with letter-spacing for the spaced `F A C T S` effect).
+
+### How to produce the paired `.docx`
+
+Every agent runs the shipped helper script as its final post-`.md`-write step:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <output.md>
+```
+
+The helper:
+1. Resolves the reference.docx in `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx`
+2. Runs pandoc with `--reference-doc` and `--from=markdown+pipe_tables+raw_tex` to produce the `.docx`
+3. Runs the shipped `fix_docx_tables.py` to force column widths on every table
+
+For overriding (e.g., a per-case-folder reference.docx), pass the reference.docx as the second argument:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" \
+    <output.md> <case-folder>/reference.docx
+```
+
+### Per-agent output-pairing map
+
+| Agent | `.md` output | Paired `.docx` |
+|---|---|---|
+| Reader | `case-facts.md` | `case-facts.docx` |
+| Format | `format-shell.md` | `format-shell.docx` |
+| Drafter | `draft-v1.md` | `draft-v1.docx` |
+| Verifier | `verification-report.md` | `verification-report.docx` |
+| Refiner | `draft-v2.md` | `draft-v2.docx` |
+| Overseer | `opposing-notes.md` + `final-draft.md` | `opposing-notes.docx` + `final-draft.docx` |
+
+Every agent calls `pair_md_to_docx.sh` once for each `.md` it writes. Skipping this step leaves the advocate with `.md` files that cannot be opened natively in Word.
