@@ -112,13 +112,17 @@ The .docx is what the AOR will open in Word for tracked-changes review.
     - Carry over the rows from `case-facts.md` Section 1.
     - Compute page numbers post-draft (Drafter writes the .docx first, paginates after).
 
-11. **Convert to .docx using the shipped reference.docx:**
-    - Use pandoc with the shipped reference.docx — pre-customised for SC Registry formatting (A4, Times New Roman 14pt, 1.5 line spacing, 4cm left margin, Heading 1/2/3 styles locked). Command:
-      ```bash
-      pandoc draft-v1.md -o draft-v1.docx \
-        --reference-doc="${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx" \
-        --from=markdown+pipe_tables+raw_tex
-      ```
+11. **Convert to .docx using the shipped reference.docx + post-pandoc fix script (two-step process).** Step 2 is NON-NEGOTIABLE — pandoc pipe-tables do not reliably honour `tblLayout=fixed`; skipping the fix script produces stacking-column table defects.
+    ```bash
+    # Step 1 — pandoc → .docx with locked Word styles
+    pandoc draft-v1.md -o draft-v1.docx \
+      --reference-doc="${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx" \
+      --from=markdown+pipe_tables+raw_tex
+
+    # Step 2 — force table column widths (SC Annexure Index 5-col profile:
+    # Sr.No 8% / P-N 8% / Particulars 60% / Date 14% / Pgs 10%)
+    python3 "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/fix_docx_tables.py" draft-v1.docx
+    ```
     - Tables use pandoc pipe-table syntax with colon-anchored alignment row:
       ```markdown
       | Sr.No | Annx | Particulars       | Date | Pgs |
