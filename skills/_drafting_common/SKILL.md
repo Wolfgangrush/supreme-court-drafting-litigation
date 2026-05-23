@@ -123,11 +123,56 @@ Plus accompanying applications where the case type requires (Condonation of Dela
 
 ## OUTPUT FORMAT
 
-- **File type:** `.docx` (so the user can open in Word and apply tracked-changes review)
-- **Conversion tool:** pandoc (if installed) with a `reference.docx` template for SC formatting (A4, Times New Roman 14, 1.5 line spacing, 4cm left margin). Fallback: python-docx if pandoc unavailable.
-- **Output filename convention:** `<case-type>_draft-v<N>_<YYYY-MM-DD>.docx`
-   e.g., `slp-civil_draft-v1_2026-05-18.docx`
+- **File type:** `.docx` (so the AOR can open in Word and apply tracked-changes review)
+- **Conversion tool:** pandoc (required) with the **shipped** `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` — pre-customised for SC Registry formatting with locked Word styles (A4, Times New Roman 14pt, 1.5 line spacing, 4cm left margin, Heading 1 bold centered, Heading 2 bold centered with letter-spacing for `S T A T E M E N T   O F   F A C T S` effect, Heading 3 bold left, fixed table layout). The Drafter MUST use the shipped reference.docx or a per-case override — NEVER auto-generate a fresh one (that produces v0.1.0 render defects).
+- **Pandoc invocation:**
+  ```bash
+  pandoc draft-v1.md -o draft-v1.docx \
+    --reference-doc="${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx" \
+    --from=markdown+pipe_tables+raw_tex
+  ```
+- **Output filename convention:** `<case-type>_draft-v<N>_<YYYY-MM-DD>.docx` e.g., `slp-civil_draft-v1_2026-05-24.docx`
 - **NEVER overwrite an existing draft.** Each run produces a new versioned file.
+
+## PIPELINE-OPTIONALITY (load-bearing — AOR-cost discipline)
+
+The full 6-agent pipeline (Reader → Format → Drafter → Verifier → Refiner → Overseer) is **NOT** mandatory. As of v0.2.0-alpha, only the first three stages are required to produce a filing-grade draft. The remaining three are OPTIONAL QC layers the AOR explicitly invokes.
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  REQUIRED PIPELINE (default exit point)                     │
+│  Stage 1  Reader   →  case-facts.md                         │
+│  Stage 2  Format   →  format-shell.md                       │
+│  Stage 3  Drafter  →  draft-v1.docx   (filing-grade)        │
+│  ── default exit ──                                         │
+│  OPTIONAL QC PIPELINE (AOR opts in)                         │
+│  Stage 4  Verifier  →  verification-report.md               │
+│  Stage 5  Refiner   →  draft-v2.docx                        │
+│  Stage 6  Overseer  →  final-draft.docx + opposing-notes.md │
+└────────────────────────────────────────────────────────────┘
+```
+
+Each stage is itself a Claude subagent run (~80–120K tokens). Running all six on every draft can exhaust the AOR's Claude session limit. The QC stages are valuable for high-stakes matters (SLP final hearing, Curative against a 5-Judge Bench, Art 32 against the Union) but disproportionate for routine pleadings.
+
+## VERBOSITY DISCIPLINE (load-bearing — Verifier flags bloat)
+
+| Case type | Main pleading target | Hard ceiling |
+|---|---|---|
+| SLP (Civil) / SLP (Criminal) | 6,000–9,000 words | 12,000 |
+| Writ Petition (Art 32) | 5,000–8,000 words | 10,000 |
+| Transfer Petition | 2,500–4,000 words | 5,000 |
+| Review Petition | 3,500–5,500 words | 7,000 |
+| Curative Petition | 3,500–5,500 words | 7,000 |
+
+Compression rules: one paragraph per ground (not three); Synopsis ≤ 3 pages per SC Registry convention; List of Dates table = 8–20 rows deduplicated; Statement of Facts = one fact per numbered paragraph; if draft exceeds ceiling, compress before signalling Verifier.
+
+## MARKDOWN-HEADING DISCIPLINE (load-bearing — reference.docx contract)
+
+Drafter writes Markdown with `# Heading 1` for court header / case-number / cover-page anchors, `## Heading 2` for section headers (`## S Y N O P S I S`, `## S T A T E M E N T   O F   F A C T S`, `## Q U E S T I O N S   O F   L A W`, `## G R O U N D S`, `## M A I N   P R A Y E R`, etc.), `### Heading 3` for ground sub-headers. Pandoc maps headings to locked Word styles in `_sc_pleading_base/reference.docx`. The rendered .docx shows them as bold-centered-spaced section titles, not as `##` characters.
+
+Cover-page discipline: SYNOPSIS, LIST OF DATES, LIST OF ANNEXURES each begin on `\newpage` and carry ONLY court header + case-number + short cause-title + section header + content + counsel block. Full Petitioner/Respondent address block stays on the Main Petition cover only.
+
+See `_sc_pleading_base/SKILL.md` §MARKDOWN HEADING DISCIPLINE for the full convention table.
 
 ## RECOVERY / AUDIT
 

@@ -19,9 +19,9 @@ Produce the first complete draft of the Supreme Court pleading by filling every 
 - `<case-folder>/citations.md` (user-confirmed citations only — Drafter NEVER expands beyond this list)
 - `${CLAUDE_PLUGIN_ROOT}/skills/<case-type>-draft/SKILL.md` (case-type metadata)
 - `${CLAUDE_PLUGIN_ROOT}/skills/<case-type>-draft/format-from-user.md` (style reference only)
-- `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/SKILL.md` (universal SC skeleton)
-- `${CLAUDE_PLUGIN_ROOT}/skills/_drafting_common/SKILL.md` (common rules)
-- Optional `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` (pandoc template for SC formatting)
+- `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/SKILL.md` (universal SC skeleton — includes the Markdown-heading discipline)
+- `${CLAUDE_PLUGIN_ROOT}/skills/_drafting_common/SKILL.md` (common rules, verbosity discipline, pipeline-optionality)
+- `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` (REQUIRED pandoc template — pre-customised for SC Registry formatting with locked Word styles)
 
 ## Outputs
 
@@ -31,6 +31,25 @@ Produce the first complete draft of the Supreme Court pleading by filling every 
 The .docx is what the AOR will open in Word for tracked-changes review.
 
 ## Behavior
+
+0. **Markdown-heading discipline (LOAD-BEARING — every Drafter output must obey).** Pandoc maps Markdown headings to the locked Word styles in `_sc_pleading_base/reference.docx`. The Drafter MUST use:
+   - `# Heading 1` — for the Court header line, the case-number line, and the cover-page anchors of LIST OF DATES / INDEX / SYNOPSIS / LIST OF ANNEXURES.
+   - `## Heading 2` — for `## S Y N O P S I S`, `## L I S T   O F   D A T E S`, `## S T A T E M E N T   O F   F A C T S`, `## Q U E S T I O N S   O F   L A W`, `## G R O U N D S`, `## M A I N   P R A Y E R`, `## I N T E R I M   P R A Y E R`, `## L I S T   O F   A N N E X U R E S`, `## V E R I F I C A T I O N`, `## A O R   C E R T I F I C A T E`.
+   - `### Heading 3` — for ground sub-headers (Ground A, B, C…), prayer sub-clause anchors, and Accompanying Application titles.
+   - Plain body paragraphs — for everything else (Statement of Facts narrative, ground bodies, prayer clauses, declarations).
+   - **Plain text `S T A T E M E N T   O F   F A C T S` written as body text will render as left-aligned plain text.** Always use the `##` prefix so pandoc maps the heading to the centered + bold + letter-spaced Heading 2 style.
+
+   **Verbosity discipline (per `_drafting_common/SKILL.md`).** SC pleadings have generous word counts but bloat is still a defect.
+
+   | Case type | Main pleading target | Hard ceiling |
+   |---|---|---|
+   | SLP (Civil) / SLP (Criminal) | 6,000–9,000 words | 12,000 |
+   | Writ Petition (Art 32) | 5,000–8,000 words | 10,000 |
+   | Transfer Petition | 2,500–4,000 words | 5,000 |
+   | Review Petition | 3,500–5,500 words | 7,000 |
+   | Curative Petition | 3,500–5,500 words | 7,000 |
+
+   **Cover-page discipline.** SYNOPSIS, LIST OF DATES, LIST OF ANNEXURES each begin on a new page (`\newpage`) and carry ONLY: court header (`#`) + case-number line (`#`) + short cause-title + section header (`##`) + the table/content + Counsel block. DO NOT repeat the full Petitioner / Respondent address block on cover pages.
 
 1. **Verify pre-conditions:**
    - `case-facts.md` exists and Section 7 says `✅ All laws supplied + all citations confirmed`.
@@ -93,9 +112,20 @@ The .docx is what the AOR will open in Word for tracked-changes review.
     - Carry over the rows from `case-facts.md` Section 1.
     - Compute page numbers post-draft (Drafter writes the .docx first, paginates after).
 
-11. **Convert to .docx:**
-    - Use pandoc with `reference.docx` template (A4, Times New Roman 14, 1.5 spacing, 4cm left margin). Command: `pandoc draft-v1.md -o draft-v1.docx --reference-doc=<reference.docx>`.
-    - If pandoc unavailable: fallback to python-docx with the same formatting parameters.
+11. **Convert to .docx using the shipped reference.docx:**
+    - Use pandoc with the shipped reference.docx — pre-customised for SC Registry formatting (A4, Times New Roman 14pt, 1.5 line spacing, 4cm left margin, Heading 1/2/3 styles locked). Command:
+      ```bash
+      pandoc draft-v1.md -o draft-v1.docx \
+        --reference-doc="${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx" \
+        --from=markdown+pipe_tables+raw_tex
+      ```
+    - Tables use pandoc pipe-table syntax with colon-anchored alignment row:
+      ```markdown
+      | Sr.No | Annx | Particulars       | Date | Pgs |
+      |:-----:|:----:|:------------------|:----:|:---:|
+      ```
+    - Do NOT auto-generate a fresh reference.docx in the case folder. The shipped reference.docx has the SC Registry styles locked; auto-generating produces the v0.1.0 render defects (title not bold, section headers left-aligned, tables wrapping).
+    - If the AOR has supplied a `<case-folder>/reference.docx` override (rare), use it instead.
     - Filename: `<case-type>_draft-v1_<YYYY-MM-DD>.docx` (plus the corresponding `.md` for diffing).
     - NEVER overwrite an existing draft. If `draft-v1.docx` exists, write `draft-v2.docx`, etc.
 
@@ -105,12 +135,16 @@ The .docx is what the AOR will open in Word for tracked-changes review.
 - ❌ NEVER invent citations. Every citation traces to `citations.md`.
 - ❌ NEVER paraphrase corpus prose. Every connective phrase is original.
 - ❌ NEVER use bullet lists where prose is expected (SC pleadings are continuous prose).
-- ❌ NEVER use markdown formatting in the .docx body (no headers prefixed `##`; section headers are plain bold in the .docx via the pandoc reference template).
+- ✅ Markdown headings (`#`, `##`, `###`) ARE required at the section level — pandoc maps them to the locked Word-heading styles in reference.docx. Plain-text section headers render as left-aligned body text (the v0.1.0 defect). The headings are required at the Markdown source level only; the rendered .docx shows them as bold-centered-spaced section titles, not as `##` characters.
 - ❌ NEVER use first-person AI framing ("I have drafted..." / "Here is the petition...").
+- ❌ NEVER use AI-register words ("comprehensive", "robust", "delve", "leverage"). Use formal Indian pleading register.
 - ❌ NEVER skip the AOR Certificate, Declarations, or Affidavit blocks.
+- ❌ NEVER auto-generate a reference.docx in the case-folder output directory. Use the shipped one or a case-folder override.
+- ❌ NEVER repeat the full Petitioner / Respondent address block on cover pages (SYNOPSIS, LIST OF DATES, LIST OF ANNEXURES).
+- ❌ NEVER exceed the verbosity ceiling for the case type. Compress before signalling Verifier.
 - ✅ Always insert `[CITATION NEEDED: <proposition>]` placeholders where the user's `citations.md` does not cover an asserted proposition.
 - ✅ Always honour the case-type SKILL.md's mandatory_paragraphs and mandatory_certificates.
 
 ## Handoff
 
-When `draft-v1.docx` and `draft-v1.md` are written: signal Verifier to proceed.
+When `draft-v1.docx` and `draft-v1.md` are written, the Drafter's job is complete. The downstream Verifier / Refiner / Overseer stages are **OPTIONAL** QC layers (see `_drafting_common/SKILL.md` §Pipeline-optionality). Default exit point is here, after Drafter. The AOR decides whether to invoke the QC stages.

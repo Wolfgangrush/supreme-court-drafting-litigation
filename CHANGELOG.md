@@ -6,10 +6,40 @@ All notable changes to this plugin are documented here. Versioning follows [Sema
 
 ## [Unreleased]
 
-### Pending before v0.1.0 stable
-- User-paste style references into all six `format-from-user.md` files
-- First Registry-validation pass on a sample SLP-Civil filing
-- Community feedback from AORs with active Supreme Court practice
+### Pending before v0.2.0 stable
+- Reader / Format / Drafter context-caching so the three stages share one citation + skill load
+- Optional Haiku-routing for the Reader stage (extraction is pattern-match work)
+- First Registry-validation pass on a sample SLP-Civil filing under the v0.2 render path
+
+---
+
+## [0.2.0-alpha] — 2026-05-24
+
+### Critical render-defect repair + pipeline-optionality
+
+This release inherits the v0.2.0-alpha fixes from `indian-hc-drafting-litigation` and adapts them to the Supreme Court pipeline. The v0.1.0 render path produced filing-grade Markdown but the pandoc → `.docx` conversion failed SC Registry expectations on multiple counts (title not bold, section headers left-aligned, table column-headers wrapping vertically, party block leaking onto cover pages, ~6,200-word bloat on routine pleadings). This release repairs the render path.
+
+### Added
+
+- **Pre-customised SC `reference.docx`** at `skills/_sc_pleading_base/reference.docx` with locked Word styles (TNR 14pt body, 1.5 line spacing, 4cm left / 2.5cm right-top-bottom margins, Heading 1 bold centered, Heading 2 bold centered with letter-spacing for the `S T A T E M E N T   O F   F A C T S` effect, Heading 3 bold left, fixed table layout).
+- **`build_reference_docx.py`** — reproducible build script for the shipped reference.docx.
+- **MARKDOWN HEADING DISCIPLINE** section in `_sc_pleading_base/SKILL.md` and `_drafting_common/SKILL.md` documenting the Markdown → Word-style mapping the Drafter must follow.
+- **VERBOSITY DISCIPLINE** section in `_drafting_common/SKILL.md` setting per-case-type word-count targets (SLP target 6,000–9,000 words, ceiling 12,000; Art 32 WP target 5,000–8,000 ceiling 10,000; Transfer Petition target 2,500–4,000 ceiling 5,000; Review/Curative target 3,500–5,500 ceiling 7,000).
+- **PIPELINE-OPTIONALITY** section in `_drafting_common/SKILL.md` — Verifier / Refiner / Overseer are now OPTIONAL QC layers. Default exit point is after Stage 3 (Drafter); the AOR decides whether to invoke the QC stages.
+- **COVER-PAGE DISCIPLINE** — SYNOPSIS, LIST OF DATES, LIST OF ANNEXURES each begin on `\newpage` and carry ONLY court header + case-number + short cause-title + section header + content + Counsel/AOR block. Full party block stays on the Main Petition cover only.
+
+### Changed
+
+- **Drafter agent prompt** flipped on the Markdown-heading rule: the v0.1.0 rule "❌ NEVER use markdown formatting in the .docx body (no headers prefixed `##`)" was incorrect — it banned the very mechanism that maps Markdown to Word styles. The rule is replaced with: "✅ Markdown headings ARE required at the section level — pandoc maps them to the locked Word-heading styles in reference.docx."
+- **Pandoc invocation documented end-to-end** in `_drafting_common/SKILL.md` §OUTPUT FORMAT. The Drafter MUST use the shipped reference.docx; auto-generating one in the case folder is now banned (it was the v0.1.0 defect source).
+
+### Removed
+
+- The "Triple-verify is mandatory" framing from `_drafting_common/SKILL.md` — replaced with explicit OPTIONAL framing per §Pipeline-optionality.
+
+### Cost / token-budget note
+
+Running the full 6-agent pipeline burns approximately 600K tokens per draft, which can exhaust an AOR's Claude session limit in one drafting cycle. v0.2.0 makes Stages 4–6 OPTIONAL so a baseline Reader → Format → Drafter run (~280K tokens) is sufficient for routine pleadings. The optional QC stages remain available for high-stakes matters (SLP final hearing, Curative against a 5-Judge Bench, Art 32 against the Union).
 
 ---
 

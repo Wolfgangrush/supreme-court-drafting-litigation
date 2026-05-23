@@ -100,6 +100,25 @@ The case-type skill computes limitation from the impugned-order date in the user
 
 These are Court Rule / Registry mandates and are encoded directly per the encoding-rules.md Rule 6 (Court Rules trump informal practice).
 
+### MARKDOWN HEADING DISCIPLINE (load-bearing — Drafter must follow)
+
+The shipped `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` has the Word styles locked (Heading 1 = bold centered TNR 14pt; Heading 2 = bold centered with letter-spacing for the spaced `S T A T E M E N T   O F   F A C T S` effect; Heading 3 = bold left for ground sub-headers). For the styles to apply, the Drafter MUST use Markdown headings — not plain text — for the structural elements:
+
+| Markdown | Used for |
+|---|---|
+| `# Heading 1` | Court header line; case-number line; cover-page anchors of LIST OF DATES / SYNOPSIS / LIST OF ANNEXURES; the "PETITION UNDER ARTICLE …" statutory opening |
+| `## Heading 2` | `## S Y N O P S I S`, `## L I S T   O F   D A T E S`, `## S T A T E M E N T   O F   F A C T S`, `## Q U E S T I O N S   O F   L A W`, `## G R O U N D S`, `## M A I N   P R A Y E R`, `## I N T E R I M   P R A Y E R`, `## D E C L A R A T I O N`, `## A O R   C E R T I F I C A T E`, `## V E R I F I C A T I O N`, `## L I S T   O F   A N N E X U R E S` |
+| `### Heading 3` | Ground A / B / C sub-headers; prayer sub-clause anchors; Accompanying Application titles |
+| Plain body | Statement-of-Facts narrative; ground bodies; prayer clauses; declarations |
+
+Tables use pandoc pipe-table syntax with colon-anchored alignment row to control column widths:
+```markdown
+| Sr.No | Annx | Particulars       | Date | Pgs |
+|:-----:|:----:|:------------------|:----:|:---:|
+```
+
+Cover-page discipline (NON-NEGOTIABLE): SYNOPSIS, LIST OF DATES, LIST OF ANNEXURES each begin on `\newpage` and carry ONLY court header (`#`) + case-number line (`#`) + short cause-title + section header (`##`) + content + Counsel/AOR block. Full Petitioner/Respondent address block stays on the Main Petition cover only.
+
 ---
 
 ## 6. The Advocate-on-Record (AOR) Certificate — load-bearing
