@@ -26,8 +26,5 @@
     "lawtech"
   ],
   "homepage": "https://github.com/Wolfgangrush/supreme-court-drafting-litigation",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Wolfgangrush/supreme-court-drafting-litigation"
-  }
+  "repository": "https://github.com/Wolfgangrush/supreme-court-drafting-litigation"
 }
