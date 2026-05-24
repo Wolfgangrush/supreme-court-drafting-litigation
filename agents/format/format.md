@@ -97,3 +97,18 @@ The format-shell contains every section of the SC pleading in its final order, w
 When complete: signal the Drafter to proceed. Drafter reads `format-shell.md` + `case-facts.md` + the case-type SKILL.md + `format-from-user.md`.
 
 If `STYLE.FAIL_STOP` or any other halt condition: signal the user directly with the specific gap to fill.
+
+
+---
+
+## v0.2.3 EXPLICIT OUTPUT-PAIRING (load-bearing — Format MUST run after every `.md` write)
+
+After writing **format-shell** to the case folder, the Format MUST immediately invoke the shipped output-pairing helper on each `.md` artifact to produce a paired `.docx`:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <case-folder>/format-shell.md
+```
+
+The helper performs the two-step pandoc + `fix_docx_tables.py` pipeline using the shipped `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` and writes the paired `.docx` alongside the `.md`. The advocate then has both formats — `.md` for diffing / version control / downstream agent input, `.docx` for opening in Word.
+
+**Hard rule:** the Format does NOT signal the next stage of the pipeline until every `.md` it has written carries a paired `.docx`. The Verifier (or the human reviewer) checks for this pairing and flags any orphan `.md`. (Documented as v0.2.2 OUTPUT-PAIRING DISCIPLINE in `_drafting_common/SKILL.md`; v0.2.3 makes the invocation explicit in this agent's prompt so the rule survives any failure of inherited-rule compliance.)

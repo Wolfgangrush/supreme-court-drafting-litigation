@@ -125,3 +125,18 @@ Case type: <slp-civil | slp-criminal | writ-art32 | transfer-petition | review-p
 When complete and no `STOP.flag`: signal Format agent to proceed. Format reads `case-facts.md`.
 
 If `STOP.flag` exists: signal the user directly. Pipeline pauses until the user supplies missing PDFs / citations and re-invokes the pipeline.
+
+
+---
+
+## v0.2.3 EXPLICIT OUTPUT-PAIRING (load-bearing — Reader MUST run after every `.md` write)
+
+After writing **case-facts** to the case folder, the Reader MUST immediately invoke the shipped output-pairing helper on each `.md` artifact to produce a paired `.docx`:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <case-folder>/case-facts.md
+```
+
+The helper performs the two-step pandoc + `fix_docx_tables.py` pipeline using the shipped `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` and writes the paired `.docx` alongside the `.md`. The advocate then has both formats — `.md` for diffing / version control / downstream agent input, `.docx` for opening in Word.
+
+**Hard rule:** the Reader does NOT signal the next stage of the pipeline until every `.md` it has written carries a paired `.docx`. The Verifier (or the human reviewer) checks for this pairing and flags any orphan `.md`. (Documented as v0.2.2 OUTPUT-PAIRING DISCIPLINE in `_drafting_common/SKILL.md`; v0.2.3 makes the invocation explicit in this agent's prompt so the rule survives any failure of inherited-rule compliance.)

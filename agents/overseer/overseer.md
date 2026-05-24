@@ -123,3 +123,19 @@ Case type: <case-type>
 When `opposing-notes.md` and `final-draft.docx` are written: pipeline complete. Signal the AOR to review.
 
 The audit chain is now: `case-facts.md` → `format-shell.md` → `draft-v1.md/docx` → `verification-report.md` → `draft-v2.md/docx` → `opposing-notes.md` → `final-draft.docx`. Every file timestamped. Every fact traceable to its source. The AOR signs, files, and remains the responsible advocate of record.
+
+
+---
+
+## v0.2.3 EXPLICIT OUTPUT-PAIRING (load-bearing — Overseer MUST run after every `.md` write)
+
+After writing **opposing-notes + final-draft** to the case folder, the Overseer MUST immediately invoke the shipped output-pairing helper on each `.md` artifact to produce a paired `.docx`:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <case-folder>/opposing-notes.md
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <case-folder>/final-draft.md
+```
+
+The helper performs the two-step pandoc + `fix_docx_tables.py` pipeline using the shipped `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` and writes the paired `.docx` alongside the `.md`. The advocate then has both formats — `.md` for diffing / version control / downstream agent input, `.docx` for opening in Word.
+
+**Hard rule:** the Overseer does NOT signal the next stage of the pipeline until every `.md` it has written carries a paired `.docx`. The Verifier (or the human reviewer) checks for this pairing and flags any orphan `.md`. (Documented as v0.2.2 OUTPUT-PAIRING DISCIPLINE in `_drafting_common/SKILL.md`; v0.2.3 makes the invocation explicit in this agent's prompt so the rule survives any failure of inherited-rule compliance.)

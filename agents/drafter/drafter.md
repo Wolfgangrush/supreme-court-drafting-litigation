@@ -152,3 +152,18 @@ The .docx is what the AOR will open in Word for tracked-changes review.
 ## Handoff
 
 When `draft-v1.docx` and `draft-v1.md` are written, the Drafter's job is complete. The downstream Verifier / Refiner / Overseer stages are **OPTIONAL** QC layers (see `_drafting_common/SKILL.md` §Pipeline-optionality). Default exit point is here, after Drafter. The AOR decides whether to invoke the QC stages.
+
+
+---
+
+## v0.2.3 EXPLICIT OUTPUT-PAIRING (load-bearing — Drafter MUST run after every `.md` write)
+
+After writing **draft-v1** to the case folder, the Drafter MUST immediately invoke the shipped output-pairing helper on each `.md` artifact to produce a paired `.docx`:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/pair_md_to_docx.sh" <case-folder>/draft-v1.md
+```
+
+The helper performs the two-step pandoc + `fix_docx_tables.py` pipeline using the shipped `reference.docx` at `${CLAUDE_PLUGIN_ROOT}/skills/_sc_pleading_base/reference.docx` and writes the paired `.docx` alongside the `.md`. The advocate then has both formats — `.md` for diffing / version control / downstream agent input, `.docx` for opening in Word.
+
+**Hard rule:** the Drafter does NOT signal the next stage of the pipeline until every `.md` it has written carries a paired `.docx`. The Verifier (or the human reviewer) checks for this pairing and flags any orphan `.md`. (Documented as v0.2.2 OUTPUT-PAIRING DISCIPLINE in `_drafting_common/SKILL.md`; v0.2.3 makes the invocation explicit in this agent's prompt so the rule survives any failure of inherited-rule compliance.)
