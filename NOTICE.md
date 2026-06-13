@@ -113,7 +113,7 @@ Bar Council of India Rules, Part VI, Chapter II, Section IV, Rule 36 restricts a
 (b) The plugin does not offer paid services through this repository.
 (c) The plugin does not advertise the author's practice.
 (d) The plugin does not solicit retainer engagements.
-(e) The plugin is published under the **Wolfgang Rush** open-source brand, a name used to publish open-source legal-tech infrastructure separately from the author's professional advocacy practice.
+(e) The plugin is published under the **wolfgang_rush** open-source brand, a name used to publish open-source legal-tech infrastructure separately from the author's professional advocacy practice.
 
 Future releases may introduce a commercial layer published under a separate corporate entity. At that point this section will be updated. The current release (v0.x.x) is open-source-only infrastructure with no commercial channel.
 
@@ -139,6 +139,6 @@ This project does not have an email contact channel and does not accept private 
 
 ## 10. Author
 
-**Rushikesh R. Mahajan**, Advocate, enrolled with the Bar Council of Maharashtra and Goa, practising before the Bombay High Court (Nagpur Bench).
+**Rushikesh R. Mahajan**, Advocate, enrolled with the Bar Council of Maharashtra and Goa, practising before the High Courts of India.
 
-Project published under the **Wolfgang Rush** open-source brand for legal-tech infrastructure.
+Project published under the **wolfgang_rush** open-source brand for legal-tech infrastructure.

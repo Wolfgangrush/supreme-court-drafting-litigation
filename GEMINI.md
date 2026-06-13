@@ -2,7 +2,7 @@
 
 > Gemini CLI hierarchical context file. Auto-loaded when `gemini` runs from this folder. Mirrors the operational contract of `.claude/` so the pipeline behaves identically whether the LLM brain is Claude or Gemini.
 
-**Plugin:** `supreme-court-drafting` · **Forum:** Supreme Court of India (SC Registry conventions enforced) · **Publisher:** Wolfgang Rush · **License:** MIT
+**Plugin:** `supreme-court-drafting` · **Forum:** Supreme Court of India (SC Registry conventions enforced) · **Publisher:** wolfgang_rush · **License:** MIT
 
 ---
 
@@ -125,7 +125,7 @@ Every output must be **advocate-owned and human-verified** before filing.
 
 ## ⚠️ THIRD-PARTY DISCLAIMER
 
-Running on Google's Gemini infrastructure. Publisher (Wolfgang Rush) does NOT endorse Gemini, receives no compensation from Google, verifies no claims about Gemini's privacy posture. The user assumes all risk under MIT license + Google's Gemini API terms.
+Running on Google's Gemini infrastructure. Publisher (wolfgang_rush) does NOT endorse Gemini, receives no compensation from Google, verifies no claims about Gemini's privacy posture. The user assumes all risk under MIT license + Google's Gemini API terms.
 
 For real client matters under BCI Rule 17 → Gemini paid tier OR local Ollama. **Never free tier.**
 

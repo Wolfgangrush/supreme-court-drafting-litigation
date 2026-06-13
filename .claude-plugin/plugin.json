@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha",
   "description": "Open-source Claude Code plugin for drafting pleadings before the Supreme Court of India. Drafting workflows for Special Leave Petitions (Civil and Criminal), Writ Petitions under Article 32, Transfer Petitions, Review Petitions, and Curative Petitions. Adheres to the Supreme Court Rules 2013 (Orders XXI, XXII, XL, XLVIII), the Constitution of India (Articles 32, 136, 137, 142), and the Supreme Court Registry Practice Directions. Includes the drafting pipeline (Reader to Format to Drafter to Verifier to Refiner to Overseer agents) and shared SC pleading base.",
   "author": {
-    "name": "Wolfgang Rush",
+    "name": "wolfgang_rush",
     "url": "https://github.com/Wolfgangrush/supreme-court-drafting-litigation"
   },
   "license": "MIT",

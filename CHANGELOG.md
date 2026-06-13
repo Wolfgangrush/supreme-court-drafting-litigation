@@ -42,7 +42,7 @@ User feedback from the 2026-05-24 EPFO test demonstrated that the QC pipeline ou
 
 ### Clarification — per-court formatting
 
-v0.2.1 propagated a single Bombay HC Nagpur pleading-style reference.docx across all 14 plugins. The structural styling (TNR 14pt 1.5 spacing 4cm-left margin Heading 1/2/3/4) is broadly defensible for pleading-style plugins (HC / SC / Tax / Rent / MACT / Banking / Company / Consumer / Labour / Family / IP / District Court) because the court-specific differences (cause-title text, annexure prefix, statutory opening, AOR Certificate language) live in the case-type SKILL.md (Drafter content) not the reference.docx (style template). For SC the universal style is correct as the SC Registry mandate matches the HC convention (A4 + TNR 14pt + 1.5 spacing + 4cm left margin). Court-specific content (P-1/P-2 annexure prefix instead of ANNEXURE-A; SYNOPSIS + LIST OF DATES instead of just INDEX; AOR Certificate verbatim) is rendered by the Drafter from the case-type skill. Per-bench fine-tuning (e.g., Delhi HC double-spacing under Original Side Rules 2018; Punjab & Haryana watermarked paper) is achieved by supplying a case-folder reference.docx override.
+v0.2.1 propagated a single Bombay HC pleading-style reference.docx across all 14 plugins. The structural styling (TNR 14pt 1.5 spacing 4cm-left margin Heading 1/2/3/4) is broadly defensible for pleading-style plugins (HC / SC / Tax / Rent / MACT / Banking / Company / Consumer / Labour / Family / IP / District Court) because the court-specific differences (cause-title text, annexure prefix, statutory opening, AOR Certificate language) live in the case-type SKILL.md (Drafter content) not the reference.docx (style template). For SC the universal style is correct as the SC Registry mandate matches the HC convention (A4 + TNR 14pt + 1.5 spacing + 4cm left margin). Court-specific content (P-1/P-2 annexure prefix instead of ANNEXURE-A; SYNOPSIS + LIST OF DATES instead of just INDEX; AOR Certificate verbatim) is rendered by the Drafter from the case-type skill. Per-bench fine-tuning (e.g., Delhi HC double-spacing under Original Side Rules 2018; Punjab & Haryana watermarked paper) is achieved by supplying a case-folder reference.docx override.
 
 For the two TRANSACTIONAL plugins (indian-contracts-drafting-litigation + indian-property-drafting-litigation), v0.2.1 wrongly applied the pleading-style reference.docx. Those two plugins now ship a transactional-instrument variant (TNR 12pt single-spaced, no spaced section headers, no underline on headings) under their own v0.2.2 release.
 
@@ -61,14 +61,14 @@ For the two TRANSACTIONAL plugins (indian-contracts-drafting-litigation + indian
 
 ### Filing-grade format calibration
 
-Inherits the v0.2.1 calibration from `indian-hc-drafting-litigation` (anchored to an actual filed Bombay HC Nagpur Second Appeal pleading) and applies it to the SC pipeline.
+Inherits the v0.2.1 calibration from `indian-hc-drafting-litigation` (anchored to an actual filed Bombay HC Second Appeal pleading) and applies it to the SC pipeline.
 
 ### Added
 
 - **`fix_docx_tables.py`** post-pandoc script at `skills/_sc_pleading_base/fix_docx_tables.py`. Forces column widths on every table in the rendered .docx — 5-col (Sr.No / P-N / Particulars / Date / Pgs) = 8/8/60/14/10; 4-col = 10/10/65/15; 3-col = 10/75/15; 2-col (Dates–Events / Synopsis) = 18/82. Locks first-row bold + centered. Drafter runs this as the final post-pandoc step.
 - **Heading 2 with UNDERLINE** in reference.docx for spaced section headers (`S T A T E M E N T   O F   F A C T S`, `Q U E S T I O N S   O F   L A W`, `G R O U N D S`, `M A I N   P R A Y E R`, etc.) — bold + UNDERLINED + centered + letter-spacing.
 - **Heading 3 + Heading 4 styles** in reference.docx for unspaced bold-underlined section headers and left-anchored bold-underlined headings.
-- **Page numbers at TOP CENTER** (Bombay HC Nagpur convention, matching the gold-standard pleading).
+- **Page numbers at TOP CENTER** (Bombay HC convention, matching the gold-standard pleading).
 
 ### Changed
 

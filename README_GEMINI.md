@@ -2,7 +2,7 @@
 
 > The same `supreme-court-drafting` pipeline you know, now invokable from Gemini CLI. **Same 6-agent pipeline. Same canonical agent specs. Same filing-grade output. Different LLM brain.**
 
-**Version:** Gemini port 2026-05-24 · **License:** MIT · **Publisher:** Wolfgang Rush
+**Version:** Gemini port 2026-05-24 · **License:** MIT · **Publisher:** wolfgang_rush
 
 ---
 
@@ -179,7 +179,7 @@ This Gemini port is **assistive drafting infrastructure**, not autonomous decisi
 
 ## ⚠️ Third-party CLI tools — user assumes all risk
 
-The publisher (Wolfgang Rush) does NOT recommend Gemini CLI specifically, receives no compensation from Google, and verifies no claims about Gemini's privacy posture. You have chosen to integrate this plugin with Gemini CLI and assume all risk under MIT license + Google's Gemini API terms.
+The publisher (wolfgang_rush) does NOT recommend Gemini CLI specifically, receives no compensation from Google, and verifies no claims about Gemini's privacy posture. You have chosen to integrate this plugin with Gemini CLI and assume all risk under MIT license + Google's Gemini API terms.
 
 For client matters under BCI Rule 17 → local Ollama. For non-client work → Gemini paid tier is acceptable.
 
