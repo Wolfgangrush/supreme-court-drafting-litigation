@@ -1,3 +1,16 @@
+<div align="center">
+  <img src="docs/banner.png" width="820"/>
+  <br><br>
+  <strong>Open-source Claude-compatible plugin for drafting Supreme Court of India pleadings. First in the wolfgang_rush family.</strong>
+  <br><br>
+  Visit the live site: <a href="https://wolfgangrush.github.io">wolfgangrush.github.io</a>
+  <br><br>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://github.com/Wolfgangrush/supreme-court-drafting-litigation"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+  <a href="https://claude.ai"><img src="https://img.shields.io/badge/made%20for-Claude-8A2BE2.svg" alt="Made for Claude"></a>
+</div>
+
+
 # supreme-court-drafting
 
 > **Open-source Claude-compatible plugin for drafting pleadings before the Supreme Court of India.**
